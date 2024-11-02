@@ -1,0 +1,25 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+                   logicalFilePath="changelog/after/0.0.1.xml">
+
+    <changeSet id="after-0.0.1.1" author="sergii puzyrov" context="dev or local" runOnChange="true">
+        <preConditions onFail="HALT">
+            <tableExists schemaName="library" tableName="catalog"/>
+        </preConditions>
+
+        <loadUpdateData schemaName="library"
+                        tableName="catalog"
+                        file="csv/catalog.csv"
+                        primaryKey="id"
+                        separator=";"
+                        relativeToChangelogFile="true"/>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="after-0.0.1.1000" author="sergii puzyrov" context="dev or local" runAlways="true">
+        <sql>
+            SELECT setval('library.catalog_id_seq', (SELECT MAX(id) FROM library.catalog)+1, true);
+        </sql>
+        <rollback/>
+    </changeSet>
+</databaseChangeLog>

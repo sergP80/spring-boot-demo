@@ -1,0 +1,16 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+                   logicalFilePath="changelog/before/0.0.1.xml">
+
+    <changeSet id="before-0.0.1.1" author="sergii puzyrov">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS "library";
+        </sql>
+
+        <rollback>
+            <sql>
+                DROP SCHEMA IF EXISTS "library";
+            </sql>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

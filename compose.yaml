@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: 'postgres:15.5'
+    container_name: "main-db"
+    environment:
+      - 'POSTGRES_DB=library'
+      - 'POSTGRES_PASSWORD=admin123'
+      - 'POSTGRES_USER=admin-user'
+    ports:
+      - "5572:5432"
