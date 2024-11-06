@@ -63,6 +63,6 @@ class CatalogServiceImplTest {
         var result = service.getAll();
 
         assertEquals(1, result.size());
-        assertEquals(catalogDTO, result.getFirst());
+        assertEquals(catalogDTO, result.get(0));
     }
 }
