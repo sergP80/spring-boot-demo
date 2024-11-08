@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.edu.chmnu.ki.network.lib.error.BookException;
 import ua.edu.chmnu.ki.network.lib.mapper.BookMapper;
+import ua.edu.chmnu.ki.network.lib.persistence.entity.Book;
 import ua.edu.chmnu.ki.network.lib.persistence.repository.BookRepository;
+import ua.edu.chmnu.ki.network.lib.filter.mapper.EntitySpecFilterMapper;
 import ua.edu.chmnu.ki.network.lib.web.dto.BookDTO;
-import ua.edu.chmnu.ki.network.lib.web.dto.BookFilterDTO;
+import ua.edu.chmnu.ki.network.lib.filter.dto.BookFilterDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +21,8 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     private final BookMapper bookMapper;
+
+    private final EntitySpecFilterMapper<BookFilterDTO, Book> bookSpecFilterMapper;
 
     @Transactional(readOnly = true)
     @Override
@@ -34,8 +38,6 @@ public class BookServiceImpl implements BookService {
         try (var stream = bookRepository.streamAll()) {
             return stream.map(bookMapper::mapTo).collect(Collectors.toList());
         }
-
-//        return bookRepository.findAll().stream().map(bookMapper::mapTo).toList();
     }
 
     @Transactional(readOnly = true)
@@ -66,8 +68,10 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public List<BookDTO> getAllBy(BookFilterDTO filter) {
-        try (var stream = bookRepository.streamAllByFilter(filter)) {
-            return stream.map(bookMapper::mapTo).collect(Collectors.toList());
-        }
+        var specification = bookSpecFilterMapper.mapTo(filter);
+
+        return bookRepository.findAll(specification, filter.getSort()).stream()
+                .map(bookMapper::mapTo)
+                .collect(Collectors.toList());
     }
 }

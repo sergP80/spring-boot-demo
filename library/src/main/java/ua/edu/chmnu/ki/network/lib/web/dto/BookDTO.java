@@ -1,5 +1,6 @@
 package ua.edu.chmnu.ki.network.lib.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -33,7 +34,8 @@ public class BookDTO {
     @JsonProperty("pages")
     private Integer pages;
 
-    @JsonProperty("issue_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    @JsonProperty("issueDate")
     private LocalDate issueDate;
 
     @JsonProperty("website")

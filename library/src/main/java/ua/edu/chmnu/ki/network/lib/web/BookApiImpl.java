@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.edu.chmnu.ki.network.lib.service.BookService;
 import ua.edu.chmnu.ki.network.lib.web.dto.BookDTO;
-import ua.edu.chmnu.ki.network.lib.web.dto.BookFilterDTO;
+import ua.edu.chmnu.ki.network.lib.filter.dto.BookFilterDTO;
 
 import javax.validation.Valid;
 import java.util.List;
