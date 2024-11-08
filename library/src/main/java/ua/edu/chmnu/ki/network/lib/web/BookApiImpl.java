@@ -46,7 +46,7 @@ public class BookApiImpl implements BookApi {
         return service.updateById(id, source);
     }
 
-    @GetMapping(value = "/all", params = {"search"})
+    @GetMapping(value = "/all", params = {"filter"})
     @Override
     public List<BookDTO> getAllBy(BookFilterDTO filter) {
         return service.getAllBy(filter);

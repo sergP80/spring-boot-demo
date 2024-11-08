@@ -17,5 +17,11 @@ public class BookFilterDTO {
 
     private BigDecimal price;
 
+    private BigDecimal minPrice;
+
+    private BigDecimal maxPrice;
+
     private Integer pages;
+
+    private String search;
 }

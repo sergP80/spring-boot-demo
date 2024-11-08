@@ -19,10 +19,22 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     @Query(
             """
-                            SELECT book FROM Book book
-                            WHERE (:#{#filter.id} IS NULL OR book.id = :#{#filter.id})
-                             AND (:#{#filter.title} IS NULL OR book.title like %:#{#filter.title}%)
-                             AND (:#{#filter.author} IS NULL OR book.author.name like %:#{#filter.author}%)
+                                                SELECT book FROM Book book
+                                                LEFT JOIN Author author ON author.id = book.author.id
+                                                WHERE ((:#{#filter.id} IS NULL OR book.id = :#{#filter.id})
+                                                 AND (:#{#filter.title} IS NULL OR book.title LIKE CONCAT('%', COALESCE(cast(:#{#filter.title} as string) , '') , '%'))
+                                                 AND (:#{#filter.author} IS NULL OR author.name LIKE CONCAT('%', COALESCE(CAST(:#{#filter.author} as string) , ''), '%'))
+                                                 AND (:#{#filter.description} IS NULL OR book.description LIKE CONCAT('%', COALESCE(CAST(:#{#filter.description} as string) , ''), '%'))
+                                                 AND (:#{#filter.pages} IS NULL OR book.pages = :#{#filter.pages})
+                                                 AND (:#{#filter.price} IS NULL OR book.price = :#{#filter.price})
+                                                 AND (:#{#filter.minPrice} IS NULL OR book.price >= :#{#filter.minPrice})
+                                                 AND (:#{#filter.maxPrice} IS NULL OR book.price <= :#{#filter.maxPrice}))
+                                                 AND (:#{#filter.search} IS NULL OR
+                                                     book.title LIKE CONCAT('%', COALESCE(cast(:#{#filter.search} as string) , '') , '%')
+                                                     OR book.description LIKE CONCAT('%', COALESCE(cast(:#{#filter.search} as string) , '') , '%')
+                                                     OR author.name LIKE CONCAT('%', COALESCE(cast(:#{#filter.search} as string) , '') , '%')
+                                                 )
+                                                 ORDER BY book.id ASC, book.author.name ASC
                     """
     )
     Stream<Book> streamAllByFilter(@Param("filter") BookFilterDTO filter);
