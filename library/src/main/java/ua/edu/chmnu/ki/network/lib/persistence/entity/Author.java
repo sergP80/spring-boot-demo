@@ -14,19 +14,28 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(schema = "library", name = "catalog")
-public class Catalog {
+@Table(schema = "library", name = "author")
+public class Author {
 
     @Id
-    @GeneratedValue(generator = "CATALOG_GENERATOR")
+    @GeneratedValue(generator = "AUTHOR_GENERATOR")
     private Integer id;
-
-    @Column(name = "index")
-    private String index;
 
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "catalog", fetch = FetchType.LAZY)
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "website")
+    private String website;
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Book> books = new ArrayList<>();
 }

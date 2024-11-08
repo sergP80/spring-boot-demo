@@ -16,9 +16,40 @@
         <rollback/>
     </changeSet>
 
+    <changeSet id="after-0.0.1.2" author="sergii puzyrov" context="dev or local" runOnChange="true">
+        <preConditions onFail="HALT">
+            <tableExists schemaName="library" tableName="author"/>
+        </preConditions>
+
+        <loadUpdateData schemaName="library"
+                        tableName="author"
+                        file="csv/author.csv"
+                        primaryKey="id"
+                        separator=";"
+                        relativeToChangelogFile="true"/>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="after-0.0.1.3" author="sergii puzyrov" context="dev or local" runOnChange="true">
+        <preConditions onFail="HALT">
+            <tableExists schemaName="library" tableName="book"/>
+        </preConditions>
+
+        <loadUpdateData schemaName="library"
+                        tableName="book"
+                        file="csv/book.csv"
+                        primaryKey="id"
+                        separator=";"
+                        relativeToChangelogFile="true"/>
+        <rollback/>
+    </changeSet>
+
     <changeSet id="after-0.0.1.1000" author="sergii puzyrov" context="dev or local" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
         <sql>
             SELECT setval('library.catalog_id_seq', (SELECT MAX(id) FROM library.catalog)+1, true);
+            SELECT setval('library.author_id_seq', (SELECT MAX(id) FROM library.author)+1, true);
+            SELECT setval('library.book_id_seq', (SELECT MAX(id) FROM library.book)+1, true);
         </sql>
         <rollback/>
     </changeSet>

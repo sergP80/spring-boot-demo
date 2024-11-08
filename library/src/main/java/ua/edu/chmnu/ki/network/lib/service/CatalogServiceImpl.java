@@ -42,6 +42,7 @@ public class CatalogServiceImpl implements CatalogService {
         return catalogRepository.existsById(id);
     }
 
+    @Transactional
     @Override
     public CatalogDTO create(CatalogDTO newCatalog) {
         if (this.existById(newCatalog.getId())) {
@@ -55,5 +56,21 @@ public class CatalogServiceImpl implements CatalogService {
         catalogRepository.save(catalog);
 
         return catalogMapper.mapTo(catalog);
+    }
+
+    @Transactional
+    @Override
+    public CatalogDTO updateById(Integer id, CatalogDTO catalog) {
+        if (this.existById(id)) {
+            throw new CatalogException("Catalog with id " + id + " already exists");
+        }
+
+        Catalog catalogEntity = catalogMapper.mapTo(catalog);
+
+        catalog.setId(id);
+
+        catalogRepository.save(catalogEntity);
+
+        return catalogMapper.mapTo(catalogEntity);
     }
 }

@@ -1,0 +1,69 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+                   logicalFilePath="changelog/migration/R-1.0.1/1.0.1.0.xml">
+
+    <changeSet id="1.0.1.0.0" author="sergii puzyrov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="library"  tableName="author"/>
+            </not>
+        </preConditions>
+
+        <createSequence schemaName="library" sequenceName="author_id_seq" startValue="1" incrementBy="1" cycle="false" cacheSize="10"/>
+
+        <createTable schemaName="library" tableName="author">
+            <column name="id" type="int" defaultValueComputed="nextval('library.author_id_seq')">
+                <constraints primaryKeyName="pk_author" primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="varchar(1024)"/>
+            <column name="email" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(128)"/>
+            <column name="website" type="varchar(512)"/>
+        </createTable>
+
+        <rollback>
+            <dropTable schemaName="library" tableName="author"/>
+            <dropSequence schemaName="library" sequenceName="author_id_seq"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1.0.1.0.1" author="sergii puzyrov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="library"  tableName="book"/>
+            </not>
+        </preConditions>
+
+        <createSequence schemaName="library" sequenceName="book_id_seq" startValue="1" incrementBy="1" cycle="false" cacheSize="10"/>
+
+        <createTable schemaName="library" tableName="book">
+            <column name="id" type="int" defaultValueComputed="nextval('library.book_id_seq')">
+                <constraints primaryKeyName="pk_book" primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="author_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_book_author" references="library.author(id)"/>
+            </column>
+            <column name="price" type="decimal(12,2)"/>
+            <column name="pages" type="int"/>
+            <column name="issue_date" type="date"/>
+            <column name="website" type="varchar(512)"/>
+            <column name="catalog_id" type="int">
+                <constraints nullable="true" foreignKeyName="fk_book_catalog" references="library.catalog(id)"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable schemaName="library" tableName="book"/>
+            <dropSequence schemaName="library" sequenceName="book_id_seq"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

@@ -8,40 +8,47 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.edu.chmnu.ki.network.lib.web.dto.CatalogDTO;
-import ua.edu.chmnu.ki.network.lib.service.CatalogService;
+import ua.edu.chmnu.ki.network.lib.service.BookService;
+import ua.edu.chmnu.ki.network.lib.web.dto.BookDTO;
+import ua.edu.chmnu.ki.network.lib.web.dto.BookFilterDTO;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/library/catalog")
+@RequestMapping("/library/books")
 @RequiredArgsConstructor
-public class CatalogApiImpl implements CatalogApi {
+public class BookApiImpl implements BookApi {
 
-    private final CatalogService service;
+    private final BookService service;
 
     @GetMapping("/{id}")
     @Override
-    public CatalogDTO getById(@PathVariable(name = "id") Integer id) {
+    public BookDTO getById(@PathVariable Integer id) {
         return service.getById(id);
     }
 
     @GetMapping("/all")
     @Override
-    public List<CatalogDTO> getAll() {
+    public List<BookDTO> getAll() {
         return service.getAll();
     }
 
     @PostMapping
     @Override
-    public CatalogDTO create(@Valid @RequestBody CatalogDTO catalog) {
-        return service.create(catalog);
+    public BookDTO create(@RequestBody @Valid BookDTO source) {
+        return service.create(source);
     }
 
     @PutMapping("/{id}")
     @Override
-    public CatalogDTO update(Integer id, CatalogDTO source) {
-        throw new UnsupportedOperationException("Update catalog is not supported.");
+    public BookDTO update(@PathVariable Integer id, @RequestBody @Valid BookDTO source) {
+        return service.updateById(id, source);
+    }
+
+    @GetMapping(value = "/all", params = {"search"})
+    @Override
+    public List<BookDTO> getAllBy(BookFilterDTO filter) {
+        return service.getAllBy(filter);
     }
 }
