@@ -34,8 +34,6 @@ public class BookSpecFilterMapper implements EntitySpecFilterMapper<BookFilterDT
     private Predicate createSearchPredicate(Root<Book> root, CriteriaBuilder criteriaBuilder, String search) {
         List<Predicate> predicates = new ArrayList<>();
 
-        predicates.add(criteriaBuilder.conjunction());
-
         search = "%" + search.toLowerCase() + "%";
 
         predicates.add(
