@@ -1,6 +1,7 @@
 package ua.edu.chmnu.ki.network.lib.web;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.edu.chmnu.ki.network.lib.filter.dto.CatalogFilterDTO;
 import ua.edu.chmnu.ki.network.lib.web.dto.CatalogDTO;
 import ua.edu.chmnu.ki.network.lib.service.CatalogService;
 
@@ -29,8 +31,8 @@ public class CatalogApiImpl implements CatalogApi {
 
     @GetMapping("/all")
     @Override
-    public List<CatalogDTO> getAll() {
-        return service.getAll();
+    public List<CatalogDTO> getAllBy(CatalogFilterDTO filter) {
+        return service.getAllBy(filter);
     }
 
     @PostMapping
@@ -43,5 +45,11 @@ public class CatalogApiImpl implements CatalogApi {
     @Override
     public CatalogDTO update(Integer id, CatalogDTO source) {
         throw new UnsupportedOperationException("Update catalog is not supported.");
+    }
+
+    @DeleteMapping("/{id}")
+    @Override
+    public void deleteById(@PathVariable Integer id) {
+        service.deleteById(id);
     }
 }

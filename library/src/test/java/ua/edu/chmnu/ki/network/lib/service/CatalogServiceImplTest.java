@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.edu.chmnu.ki.network.lib.error.CatalogException;
+import ua.edu.chmnu.ki.network.lib.filter.dto.CatalogFilterDTO;
 import ua.edu.chmnu.ki.network.lib.mapper.CatalogMapper;
 import ua.edu.chmnu.ki.network.lib.persistence.entity.Catalog;
 import ua.edu.chmnu.ki.network.lib.persistence.repository.CatalogRepository;
@@ -38,6 +39,9 @@ class CatalogServiceImplTest {
     @Mock
     private CatalogDTO catalogDTO;
 
+    @Mock
+    private CatalogFilterDTO catalogFilterDTO;
+
     @ParameterizedTest
     @ValueSource(ints = {1, 3})
     void shouldSuccessGetItemById(Integer id) {
@@ -60,7 +64,7 @@ class CatalogServiceImplTest {
         when(catalogRepository.findAll()).thenReturn(List.of(catalog));
         when(catalogMapper.mapTo(catalog)).thenReturn(catalogDTO);
 
-        var result = service.getAll();
+        var result = service.getAllBy(catalogFilterDTO);
 
         assertEquals(1, result.size());
         assertEquals(catalogDTO, result.get(0));

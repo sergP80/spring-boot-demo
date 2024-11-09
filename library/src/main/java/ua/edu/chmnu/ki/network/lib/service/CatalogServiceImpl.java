@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.edu.chmnu.ki.network.lib.error.CatalogException;
+import ua.edu.chmnu.ki.network.lib.filter.dto.CatalogFilterDTO;
 import ua.edu.chmnu.ki.network.lib.mapper.CatalogMapper;
 import ua.edu.chmnu.ki.network.lib.persistence.entity.Catalog;
 import ua.edu.chmnu.ki.network.lib.persistence.repository.CatalogRepository;
@@ -31,7 +32,7 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<CatalogDTO> getAll() {
+    public List<CatalogDTO> getAllBy(CatalogFilterDTO filterDTO) {
         return catalogRepository.findAll().stream()
                 .map(catalogMapper::mapTo)
                 .collect(Collectors.toList());
@@ -72,5 +73,15 @@ public class CatalogServiceImpl implements CatalogService {
         catalogRepository.save(catalogEntity);
 
         return catalogMapper.mapTo(catalogEntity);
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Integer id) {
+        if (!existById(id)) {
+            throw new CatalogException("Catalog with id " + id + " does not exist");
+        }
+
+        catalogRepository.deleteById(id);
     }
 }

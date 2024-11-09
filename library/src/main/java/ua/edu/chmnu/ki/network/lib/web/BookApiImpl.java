@@ -1,6 +1,7 @@
 package ua.edu.chmnu.ki.network.lib.web;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,9 +9,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.edu.chmnu.ki.network.lib.filter.dto.BookFilterDTO;
 import ua.edu.chmnu.ki.network.lib.service.BookService;
 import ua.edu.chmnu.ki.network.lib.web.dto.BookDTO;
-import ua.edu.chmnu.ki.network.lib.filter.dto.BookFilterDTO;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,10 +29,10 @@ public class BookApiImpl implements BookApi {
         return service.getById(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping(value = "/all")
     @Override
-    public List<BookDTO> getAll() {
-        return service.getAll();
+    public List<BookDTO> getAllBy(BookFilterDTO filter) {
+        return service.getAllBy(filter);
     }
 
     @PostMapping
@@ -46,9 +47,9 @@ public class BookApiImpl implements BookApi {
         return service.updateById(id, source);
     }
 
-    @GetMapping(value = "/all", params = {"filter"})
+    @DeleteMapping("/{id}")
     @Override
-    public List<BookDTO> getAllBy(BookFilterDTO filter) {
-        return service.getAllBy(filter);
+    public void deleteById(@PathVariable Integer id) {
+        service.deleteById(id);
     }
 }

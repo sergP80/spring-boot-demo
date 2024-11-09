@@ -34,10 +34,12 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<BookDTO> getAll() {
-        try (var stream = bookRepository.streamAll()) {
-            return stream.map(bookMapper::mapTo).collect(Collectors.toList());
-        }
+    public List<BookDTO> getAllBy(BookFilterDTO filter) {
+        var specification = bookSpecFilterMapper.mapTo(filter);
+
+        return bookRepository.findAll(specification, filter.getSort()).stream()
+                .map(bookMapper::mapTo)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -65,13 +67,13 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new BookException("Book not found " + id));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
-    public List<BookDTO> getAllBy(BookFilterDTO filter) {
-        var specification = bookSpecFilterMapper.mapTo(filter);
+    public void deleteById(Integer id) {
+        if (!existById(id)) {
+            throw new BookException("Book not found " + id);
+        }
 
-        return bookRepository.findAll(specification, filter.getSort()).stream()
-                .map(bookMapper::mapTo)
-                .collect(Collectors.toList());
+        bookRepository.deleteById(id);
     }
 }
