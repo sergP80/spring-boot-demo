@@ -1,4 +1,4 @@
 package ua.edu.chmnu.ki.network.lib.filter;
 
-public interface EntityFiltered {
+public interface EntityFilter {
 }

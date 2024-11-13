@@ -2,13 +2,13 @@ package ua.edu.chmnu.ki.network.lib.filter.dto;
 
 import lombok.Data;
 import org.springframework.data.domain.Sort;
-import ua.edu.chmnu.ki.network.lib.filter.EntityFiltered;
+import ua.edu.chmnu.ki.network.lib.filter.EntityFilter;
 import ua.edu.chmnu.ki.network.lib.filter.RangeFilter;
 
 import java.math.BigDecimal;
 
 @Data
-public class BookFilterDTO implements EntityFiltered {
+public class BookFilterDTO implements EntityFilter {
 
     private Integer id;
 
@@ -19,6 +19,10 @@ public class BookFilterDTO implements EntityFiltered {
     private String author;
 
     private BigDecimal price;
+
+    private BigDecimal priceMin;
+
+    private BigDecimal priceMax;
 
     private RangeFilter<BigDecimal> priceRange;
 
@@ -65,8 +69,6 @@ public class BookFilterDTO implements EntityFiltered {
     public boolean hasYear() {
         return year != null;
     }
-
-
 
     public Sort getSort() {
         return sort == null ? Sort.by(Sort.Direction.ASC, "id") : sort;

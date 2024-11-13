@@ -23,15 +23,19 @@ public class BookSpecFilterMapper implements EntitySpecFilterMapper<BookFilterDT
     public Specification<Book> mapTo(@NonNull BookFilterDTO filter) {
         return (root, query, criteriaBuilder) -> {
 
-            if (filter.hasSearch()) {
-                return createSearchPredicate(root, criteriaBuilder, filter.getSearch());
-            } else {
-                return createParamPredicate(root, criteriaBuilder, filter);
-            }
+            var searchPredicate = createSearchPredicate(root, criteriaBuilder, filter.getSearch());
+
+            var paramsPredicate = createParamPredicate(root, criteriaBuilder, filter);
+
+            return criteriaBuilder.and(searchPredicate, paramsPredicate);
         };
     }
 
     private Predicate createSearchPredicate(Root<Book> root, CriteriaBuilder criteriaBuilder, String search) {
+        if (search == null || search.isEmpty()) {
+            return criteriaBuilder.conjunction();
+        }
+
         List<Predicate> predicates = new ArrayList<>();
 
         search = "%" + search.toLowerCase() + "%";

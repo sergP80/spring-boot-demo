@@ -2,10 +2,10 @@ package ua.edu.chmnu.ki.network.lib.filter.dto;
 
 import lombok.Data;
 import org.springframework.data.domain.Sort;
-import ua.edu.chmnu.ki.network.lib.filter.EntityFiltered;
+import ua.edu.chmnu.ki.network.lib.filter.EntityFilter;
 
 @Data
-public class CatalogFilterDTO implements EntityFiltered {
+public class CatalogFilterDTO implements EntityFilter {
 
     private String index;
 
