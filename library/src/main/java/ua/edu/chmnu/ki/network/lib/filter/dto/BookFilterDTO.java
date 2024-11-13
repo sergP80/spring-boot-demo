@@ -6,6 +6,8 @@ import ua.edu.chmnu.ki.network.lib.filter.EntityFilter;
 import ua.edu.chmnu.ki.network.lib.filter.RangeFilter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Year;
 
 @Data
 public class BookFilterDTO implements EntityFilter {
@@ -32,7 +34,9 @@ public class BookFilterDTO implements EntityFilter {
 
     private Integer year;
 
-    private RangeFilter<Integer> yearRange;
+    private RangeFilter<Year> yearRange;
+
+    private RangeFilter<LocalDate> dateRange;
 
     private String search;
 

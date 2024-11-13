@@ -13,6 +13,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.time.MonthDay;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -91,15 +92,28 @@ public class BookSpecFilterMapper implements EntitySpecFilterMapper<BookFilterDT
             predicates.add(criteriaBuilder.equal(criteriaBuilder.function("EXTRACT", Integer.class, criteriaBuilder.literal("YEAR"), root.get("issueDate")), filter.getYear()));
         } else {
             Optional.ofNullable(filter.getYearRange())
+                    .map(range ->
+                            range.convert(
+                                    value -> value.atMonthDay(MonthDay.of(1, 31)),
+                                    value -> value.atMonthDay(MonthDay.of(12, 31))
+                            )
+                    )
                     .ifPresent(range -> predicates.add(
                                     range.toPredicate(
                                             root.get("issueDate"),
-                                            criteriaBuilder,
-                                            path -> criteriaBuilder.function("EXTRACT", Integer.class, criteriaBuilder.literal("YEAR"), path)
+                                            criteriaBuilder
                                     )
                             )
                     );
         }
+
+        Optional.ofNullable(filter.getDateRange())
+                .ifPresent(range -> predicates.add(
+                                range.toPredicate(
+                                        root.get("issueDate"),
+                                        criteriaBuilder)
+                        )
+                );
 
         if (filter.hasTitle()) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("title")), filter.getTitle().toLowerCase()));
