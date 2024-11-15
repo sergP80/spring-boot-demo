@@ -1,7 +1,6 @@
 package ua.edu.chmnu.ki.network.lib.filter.dto;
 
 import lombok.Data;
-import org.springframework.data.domain.Sort;
 import ua.edu.chmnu.ki.network.lib.filter.EntityFilter;
 import ua.edu.chmnu.ki.network.lib.filter.RangeFilter;
 
@@ -40,8 +39,6 @@ public class BookFilterDTO implements EntityFilter {
 
     private String search;
 
-    private Sort sort;
-
     public boolean hasSearch() {
         return search != null && !search.isBlank();
     }
@@ -72,9 +69,5 @@ public class BookFilterDTO implements EntityFilter {
 
     public boolean hasYear() {
         return year != null;
-    }
-
-    public Sort getSort() {
-        return sort == null ? Sort.by(Sort.Direction.ASC, "id") : sort;
     }
 }

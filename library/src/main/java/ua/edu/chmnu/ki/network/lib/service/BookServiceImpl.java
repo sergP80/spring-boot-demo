@@ -1,15 +1,18 @@
 package ua.edu.chmnu.ki.network.lib.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.edu.chmnu.ki.network.lib.error.BookException;
+import ua.edu.chmnu.ki.network.lib.filter.dto.BookFilterDTO;
+import ua.edu.chmnu.ki.network.lib.filter.mapper.EntitySpecFilterMapper;
 import ua.edu.chmnu.ki.network.lib.mapper.BookMapper;
 import ua.edu.chmnu.ki.network.lib.persistence.entity.Book;
 import ua.edu.chmnu.ki.network.lib.persistence.repository.BookRepository;
-import ua.edu.chmnu.ki.network.lib.filter.mapper.EntitySpecFilterMapper;
 import ua.edu.chmnu.ki.network.lib.web.dto.BookDTO;
-import ua.edu.chmnu.ki.network.lib.filter.dto.BookFilterDTO;
+import ua.edu.chmnu.ki.network.lib.web.dto.PageDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,11 +38,25 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public List<BookDTO> getAllBy(BookFilterDTO filter) {
+        return getAllBy(filter, Sort.by(Sort.Order.asc("id")));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<BookDTO> getAllBy(BookFilterDTO filter, Sort sort) {
         var specification = bookSpecFilterMapper.mapTo(filter);
 
-        return bookRepository.findAll(specification, filter.getSort()).stream()
+        return bookRepository.findAll(specification, sort).stream()
                 .map(bookMapper::mapTo)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PageDTO<BookDTO> getAllBy(BookFilterDTO filter, Pageable pageable) {
+        var specification = bookSpecFilterMapper.mapTo(filter);
+
+        return PageDTO.of(bookRepository.findAll(specification, pageable), bookMapper::mapTo);
     }
 
     @Transactional(readOnly = true)

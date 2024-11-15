@@ -1,6 +1,8 @@
 package ua.edu.chmnu.ki.network.lib.web;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,11 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.edu.chmnu.ki.network.lib.filter.dto.BookFilterDTO;
 import ua.edu.chmnu.ki.network.lib.service.BookService;
 import ua.edu.chmnu.ki.network.lib.web.dto.BookDTO;
+import ua.edu.chmnu.ki.network.lib.web.dto.PageDTO;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -30,10 +32,23 @@ public class BookApiImpl implements BookApi {
         return service.getById(id);
     }
 
+    @Deprecated
     @GetMapping(value = "/all")
     @Override
     public List<BookDTO> getAllBy(BookFilterDTO filter) {
         return service.getAllBy(filter);
+    }
+
+    @GetMapping(value = "/v1/all")
+    @Override
+    public List<BookDTO> getAllBy(BookFilterDTO filter, Sort sort) {
+        return service.getAllBy(filter, sort);
+    }
+
+    @GetMapping(value = "/v2/all")
+    @Override
+    public PageDTO<BookDTO> getAllBy(BookFilterDTO filter, Pageable pageable) {
+        return service.getAllBy(filter, pageable);
     }
 
     @PostMapping
