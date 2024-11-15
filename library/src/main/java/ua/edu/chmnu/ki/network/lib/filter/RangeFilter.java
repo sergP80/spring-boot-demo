@@ -37,7 +37,10 @@ public class RangeFilter<T extends Comparable<? super T>> {
 
     // Method to convert the range to a Predicate
     public <U extends Comparable<? super U>> RangeFilter<U> convert(Function<T, U> minMapper, Function<T, U> maxMapper) {
-        return new RangeFilter<>(minMapper.apply(min), maxMapper.apply(max));
+        return new RangeFilter<>(
+                min != null ? minMapper.apply(min) : null,
+                max != null ? maxMapper.apply(max): null
+        );
     }
 
     // Method to convert the range to a Predicate, accepting an expression function
