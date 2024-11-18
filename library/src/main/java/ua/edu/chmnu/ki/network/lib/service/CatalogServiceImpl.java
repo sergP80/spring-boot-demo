@@ -1,13 +1,17 @@
 package ua.edu.chmnu.ki.network.lib.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.edu.chmnu.ki.network.lib.error.CatalogException;
+import ua.edu.chmnu.ki.network.lib.filter.dto.BookFilterDTO;
 import ua.edu.chmnu.ki.network.lib.filter.dto.CatalogFilterDTO;
+import ua.edu.chmnu.ki.network.lib.filter.mapper.EntitySpecFilterMapper;
 import ua.edu.chmnu.ki.network.lib.mapper.CatalogMapper;
 import ua.edu.chmnu.ki.network.lib.persistence.entity.Catalog;
 import ua.edu.chmnu.ki.network.lib.persistence.repository.CatalogRepository;
+import ua.edu.chmnu.ki.network.lib.web.dto.BookDTO;
 import ua.edu.chmnu.ki.network.lib.web.dto.CatalogDTO;
 
 import java.util.List;
@@ -21,6 +25,8 @@ public class CatalogServiceImpl implements CatalogService {
 
     private final CatalogMapper catalogMapper;
 
+    private final EntitySpecFilterMapper<CatalogFilterDTO, Catalog> catalogSpecFilterMapper;
+
     @Transactional(readOnly = true)
     @Override
     public CatalogDTO getById(Integer id) {
@@ -32,8 +38,17 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<CatalogDTO> getAllBy(CatalogFilterDTO filterDTO) {
-        return catalogRepository.findAll().stream()
+    public List<CatalogDTO> getAllBy(CatalogFilterDTO filter) {
+        return getAllBy(filter, Sort.by(Sort.Order.asc("id")));
+    }
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<CatalogDTO> getAllBy(CatalogFilterDTO filter, Sort sort) {
+        var specification = catalogSpecFilterMapper.mapTo(filter);
+
+        return catalogRepository.findAll(specification, sort).stream()
                 .map(catalogMapper::mapTo)
                 .collect(Collectors.toList());
     }

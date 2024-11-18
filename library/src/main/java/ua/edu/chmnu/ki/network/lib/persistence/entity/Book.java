@@ -1,16 +1,13 @@
 package ua.edu.chmnu.ki.network.lib.persistence.entity;
 
 import lombok.Data;
+import ua.edu.chmnu.ki.network.lib.persistence.enums.BookStatus;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -46,4 +43,17 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "catalog_id")
     private Catalog catalog;
+
+    //true is available
+    //false book is taken by user
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", columnDefinition = "library.BookStatus")
+    private BookStatus status;
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private List<History> history = new ArrayList<>();
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private List<Booked> booked = new ArrayList<>();
 }

@@ -7,6 +7,7 @@ import ua.edu.chmnu.ki.network.lib.filter.dto.BookFilterDTO;
 import ua.edu.chmnu.ki.network.lib.filter.mapper.EntitySpecFilterMapper;
 import ua.edu.chmnu.ki.network.lib.persistence.entity.Author;
 import ua.edu.chmnu.ki.network.lib.persistence.entity.Book;
+import ua.edu.chmnu.ki.network.lib.persistence.enums.BookStatus;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Join;
@@ -28,7 +29,11 @@ public class BookSpecFilterMapper implements EntitySpecFilterMapper<BookFilterDT
 
             var paramsPredicate = createParamPredicate(root, criteriaBuilder, filter);
 
-            return criteriaBuilder.and(searchPredicate, paramsPredicate);
+            // Apply filter for status
+            Predicate statusPredicate = criteriaBuilder.equal(root.get("status"), BookStatus.AVAILABLE);
+
+
+            return criteriaBuilder.and(searchPredicate, paramsPredicate, statusPredicate);
         };
     }
 

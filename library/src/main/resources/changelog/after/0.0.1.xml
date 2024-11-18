@@ -43,6 +43,45 @@
                         relativeToChangelogFile="true"/>
         <rollback/>
     </changeSet>
+    <changeSet id="after-0.0.1.4" author="andrii petrov" context="dev or local" runOnChange="true">
+        <preConditions onFail="HALT">
+            <tableExists schemaName="library" tableName="client"/>
+        </preConditions>
+
+        <loadUpdateData schemaName="library"
+                        tableName="client"
+                        file="csv/client.csv"
+                        primaryKey="id"
+                        separator=";"
+                        relativeToChangelogFile="true"/>
+        <rollback/>
+    </changeSet>
+    <changeSet id="after-0.0.1.5" author="andrii petrov" context="dev or local" runOnChange="true">
+        <preConditions onFail="HALT">
+            <tableExists schemaName="library" tableName="history"/>
+        </preConditions>
+
+        <loadUpdateData schemaName="library"
+                        tableName="history"
+                        file="csv/history.csv"
+                        primaryKey="id"
+                        separator=";"
+                        relativeToChangelogFile="true"/>
+        <rollback/>
+    </changeSet>
+    <changeSet id="after-0.0.1.6" author="andrii petrov" context="dev or local" runOnChange="true">
+        <preConditions onFail="HALT">
+            <tableExists schemaName="library" tableName="booked"/>
+        </preConditions>
+
+        <loadUpdateData schemaName="library"
+                        tableName="booked"
+                        file="csv/booked.csv"
+                        primaryKey="id"
+                        separator=";"
+                        relativeToChangelogFile="true"/>
+        <rollback/>
+    </changeSet>
 
     <changeSet id="after-0.0.1.1000" author="sergii puzyrov" context="dev or local" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
@@ -50,6 +89,9 @@
             SELECT setval('library.catalog_id_seq', (SELECT MAX(id) FROM library.catalog)+1, true);
             SELECT setval('library.author_id_seq', (SELECT MAX(id) FROM library.author)+1, true);
             SELECT setval('library.book_id_seq', (SELECT MAX(id) FROM library.book)+1, true);
+            SELECT setval('library.client_id_seq', (SELECT MAX(id) FROM library.client)+1, true);
+            SELECT setval('library.history_id_seq', (SELECT MAX(id) FROM library.history)+1, true);
+            SELECT setval('library.history_id_seq', (SELECT MAX(id) FROM library.booked)+1, true);
         </sql>
         <rollback/>
     </changeSet>
