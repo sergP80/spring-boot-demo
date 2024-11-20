@@ -8,3 +8,5 @@ services:
       - 'POSTGRES_USER=admin-user'
     ports:
       - "5572:5432"
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql

@@ -1,13 +1,13 @@
-package ua.edu.chmnu.ki.network.lib;
+package ua.edu.chmnu.ki.network.hotel;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LibApplication {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(LibApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 }

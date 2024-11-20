@@ -55,6 +55,7 @@
 
     <modules>
         <module>library</module>
+        <module>hotel</module>
     </modules>
 
     <dependencyManagement>
