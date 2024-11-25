@@ -55,6 +55,7 @@
 
     <modules>
         <module>library</module>
+        <module>property</module>
     </modules>
 
     <dependencyManagement>
