@@ -5,11 +5,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.chmnu.ki.network.property.filter.dto.PropertiesFilterDTO;
+import ua.edu.chmnu.ki.network.property.persistence.enums.Status;
 import ua.edu.chmnu.ki.network.property.service.PropertiesService;
+import ua.edu.chmnu.ki.network.property.web.dto.ChangeStatusDTO;
 import ua.edu.chmnu.ki.network.property.web.dto.PageDTO;
 import ua.edu.chmnu.ki.network.property.web.dto.PropertiesDTO;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -61,9 +64,16 @@ public class PropertiesApiImpl implements PropertiesApi{
         service.deleteById(id);
     }
 
-    @PostMapping("/{id}/status")
-    public String setStatusSold(@PathVariable Integer id) {
-        return service.setStatusSold(id);
+    @PutMapping("/{id}/status")
+    @Override
+    public void changeStatus(@NotNull @PathVariable(name = "id") Integer id, @NotNull @RequestParam(name = "newStatus") Status status) {
+        service.changeStatus(id, status);
+    }
+
+    @PutMapping("/status")
+    @Override
+    public void changeStatus(@Valid @RequestBody ChangeStatusDTO changeStatus) {
+        service.changeStatus(changeStatus.getId(), changeStatus.getStatus());
     }
 }
 

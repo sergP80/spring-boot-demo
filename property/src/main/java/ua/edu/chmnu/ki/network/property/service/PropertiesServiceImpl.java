@@ -15,13 +15,12 @@ import ua.edu.chmnu.ki.network.property.persistence.repository.PropertiesReposit
 import ua.edu.chmnu.ki.network.property.web.dto.PageDTO;
 import ua.edu.chmnu.ki.network.property.web.dto.PropertiesDTO;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class PropertiesServiceImpl implements PropertiesService{
+public class PropertiesServiceImpl implements PropertiesService {
     private final PropertiesRepository propertiesRepository;
 
     private final PropertiesMapper propertiesMapper;
@@ -36,11 +35,6 @@ public class PropertiesServiceImpl implements PropertiesService{
                 .orElseThrow(() -> new PropertiesException("Properties not found " + id));
     }
 
-    //@Transactional(readOnly = true)
-    //@Override
-    //public List<PropertiesDTO> getAllBy(PropertiesFilterDTO filter) {
-    //    return getAllBy(filter, Sort.by(Sort.Order.asc("id")));
-    //}
     @Transactional(readOnly = true)
     @Override
     public List<PropertiesDTO> getAllBy(PropertiesFilterDTO filter) {
@@ -105,7 +99,7 @@ public class PropertiesServiceImpl implements PropertiesService{
     }
 
     @Transactional
-    public String setStatusSold(Integer propertiesId) {
+    public String changeStatus(Integer propertiesId) {
         if (propertiesId == null) {
             throw new IllegalArgumentException("Properties ID must be provided");
         }
@@ -120,10 +114,20 @@ public class PropertiesServiceImpl implements PropertiesService{
 
 
         properties.setStatus(Status.SOLD);
+        //Degradation performance
         propertiesRepository.save(properties);
 
 
         return String.format("Properties with ID %d successfully sold", propertiesId);
+    }
+
+    @Transactional
+    @Override
+    public void changeStatus(Integer id, Status status) {
+        Properties properties = propertiesRepository.findById(id)
+                .orElseThrow(() -> new PropertiesException("Properties with id " + id + " not found"));
+
+        properties.setStatus(status);
     }
 }
 
